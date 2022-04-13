@@ -1,2 +1,4 @@
 # wrbc
-Assorted scripts
+Assorted scripts to support WRBC services.
+
+
