@@ -1,5 +1,5 @@
 @echo off
-echo Waiting to start countdown 10am timer. 
+echo Waiting to start 10am countdown timer. 
 echo Do not exit this program.
 echo.
 
