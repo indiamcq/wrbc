@@ -7,7 +7,12 @@ for /f %%i in ('wmic path win32_localtime get dayofweek') do set dow=%%i
 if "%dow%" == "7" (
 rem check to see if it is sunday
 echo It is Sunday.
-set thour= 9 
+if "%date:~0,5%" == "25/12" (
+echo Christmas Day
+set thour= 8
+) else (
+set thour= 9
+)
 goto :check1
 ) else (
 set thour= 8
