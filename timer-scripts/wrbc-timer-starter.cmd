@@ -27,42 +27,44 @@ if "%date:~0,10%" == "11/04/2031" call :starter "Easter Friday"
 if "%date:~0,10%" == "26/03/2032" call :starter "Easter Friday"
 if "%date:~0,5%" == "25/12" call :starter "Christmas Day"
 rem The next line is for testing only. So normally should start with a "rem".
-rem if "%date:~4,5%" == "%date:~4,5%" (echo test date found %date:~4,5% & goto :check1 )
+call :starter "Test day"
 )
 echo No church service day/date found.
-echo This program will exit!
-timeout /t 5 /nobreak
+call :report "This program will exit!" exit
+
 goto :eof
 
 :starter
 echo It is %~1
 if "%~1" == "Christmas Day" set thour= 8
 if "%~1" == "Easter Friday" set thour= 8
+if %time:~0,2%%time:~3,2% gtr %thour%45 echo This script was started too late.
+rem the following line needs to be commented out if you want to test the script after 9:44am.
+if %time:~0,2%%time:~3,2% gtr %thour%44 call :report "The program will exit!" exit
 goto :check1
 goto :eof
 
 :check1
 rem check time every 5 minutes
 echo %time:~0,5%
-if "%time:~0,4%"=="%thour%:4" (
-goto :check2
-) 
+if "%time:~0,5%"=="%thour%:45" goto :check3
+if "%time:~0,5%"=="%thour%:44" goto :check3
+if "%time:~0,4%"=="%thour%:4" goto :check2 
 timeout /t 300 /nobreak
 GOTO :check1
 
 :check2
 rem check time every 60 seconds
 echo %time:~0,8%
-if "%time:~0,5%"=="%thour%:44" ( goto :check3)
+if "%time:~0,5%"=="%thour%:44" goto :check3
 timeout /t 60 /nobreak
 GOTO :check2
 
 :check3
 rem check time every 2 seconds
 if "%time:~0,5%"=="%thour%:45" ( 
-start Time_limit.exe --config=C:\Users\Public\Documents\wrbc-timer.ini -e -s
-call :report "Started timer!"
-exit /b
+  start Time_limit.exe --config=C:\Users\Public\Documents\wrbc-timer.ini -e -s
+  call :report "Started timer!" exit
 ) 
 timeout /t 2 /nobreak
 GOTO :check3
@@ -70,4 +72,6 @@ GOTO :check3
 :report
 echo %~1
 timeout /t 5 /nobreak
+set action=%~2
+if defined action %action%
 goto :eof
